@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1384827301 source:c:\users\jenda\development\c++\eia\fouriermotzkin\main.cpp
+	<iostream>
+	<vector>
+	<exception>
+
