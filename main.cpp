@@ -57,14 +57,17 @@ class CVector {
     void Print() {
         cout.width(5);
         for(int i = 0; i < this->GetSize(); i++) {
-            cout << values[i] << " ";
+			if(i < this->GetSize()-1) {
+				cout << ((values[i]>=0)?" + ":" - ") << abs(values[i]) << "*x" << (i+1);
+			} else {
+				cout << " <= " << values[i];
+			}
         }
 
         cout << endl;
     }
 
-    double GetMember(int i) {
-        //cout << "shit: " << this->values[i];
+    double GetMember(int i) {        
         return this->values[i];
     }
 
@@ -122,7 +125,6 @@ class CMatrix {
             }
 
             this->vectors[i]->Print();
-            cout << endl;
         }
     }
 
@@ -238,6 +240,9 @@ class CFourierMotzkinElimination {
 
         CMatrix * Eliminate2() {
             CMatrix *r = this->matrix;
+            
+            cout << endl << "Elimination:" << endl << endl;
+            
             for(int i = this->matrix->GetWidth()-2; i >= 0; --i) {
                 r->Print(true);
                 cout << "-----" << endl;
@@ -285,9 +290,7 @@ class CFourierMotzkinElimination {
                         CVector *b = (*k);
 
                         CVector *c = this->matrix->VectorFactory();
-
-                        cout << "Creating new vector ";
-
+               
                         bool valid = false;
                         for(int u = 0; u < c->GetSize(); u++) {
                             double member = a->GetMember(u) + b->GetMember(u);
@@ -299,14 +302,11 @@ class CFourierMotzkinElimination {
                             c->SetMember(u, member);
                         }
 
-                        c->Print();
-
                         if(valid)
                             r->InsertRow(c);
                     }
                 }
-
-                r->EliminateDups();
+                                
             }
 
 
@@ -320,7 +320,7 @@ class CFourierMotzkinElimination {
             CVector *row = matrix->GetRow(y);
             double reduced_value = fabs(row->GetMember(reduced_index));
 
-            if(!reduced_value) {
+            if(!reduced_value) { // division by zero
                 continue;
             }
 
@@ -370,8 +370,6 @@ int main()
 
         matrix->InsertRow(ineq);
     }
-
-    matrix->Print();
 
     CFourierMotzkinElimination *elimination = new CFourierMotzkinElimination(matrix);
 
